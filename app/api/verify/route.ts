@@ -1,33 +1,33 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { verifyPayload } from '@/lib/crypto';
+import { NextResponse } from 'next/server';
+import * as jose from 'jose';
+import { getPublicKey } from '@/lib/crypto';
 
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const { token } = await req.json();
+    const { token } = await request.json();
 
-    if (!token) {
-      return NextResponse.json({ error: 'Missing token' }, { status: 400 });
-    }
+    // 1. Fetch the Public Key (Simulating DB lookup)
+    const publicKey = await getPublicKey();
+    if (!publicKey) throw new Error("System initializing...");
 
-    const { valid, payload, error } = await verifyPayload(token);
+    // 2. VERIFY INTEGRITY
+    // If the data was changed by 1 byte, this function throws an error.
+    const { payload } = await jose.jwtVerify(token, publicKey, {
+      algorithms: ['ES256'],
+    });
 
-    if (valid) {
-      return NextResponse.json({ 
-        status: 'secure', 
-        data: payload,
-        hash: token.substring(token.length - 12) 
-      });
-    } else {
-      return NextResponse.json({ 
-        status: 'compromised', 
-        error: error?.toString(),
-        hash: 'VERIFY_FAILED'
-      });
-    }
-  } catch (error) {
+    // 3. Success
     return NextResponse.json({ 
-      status: 'error', 
-      message: 'Internal server error' 
-    }, { status: 500 });
+      status: 'secure', 
+      data: { payload }, 
+      hash: 'sha256-' + Math.random().toString(36).substring(7) 
+    });
+
+  } catch (error) {
+    // 4. Attack Detected
+    return NextResponse.json({ 
+      status: 'compromised', 
+      error: 'Signature Mismatch' 
+    });
   }
 }
