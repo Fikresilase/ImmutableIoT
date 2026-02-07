@@ -28,8 +28,8 @@ export const Ledger: React.FC<LedgerProps> = ({ lastVerifiedPh, logs, verificati
                         <Database className="w-5 h-5 text-green-400" />
                     </div>
                     <div>
-                        <h3 className="text-sm font-bold tracking-wider uppercase">Immutable Ledger</h3>
-                        <p className="text-[10px] text-zinc-500 font-mono">Status: Syncing Block #94012</p>
+                        <h3 className="text-sm font-bold tracking-wider uppercase">Integrity Log</h3>
+                        <p className="text-[10px] text-zinc-500 font-mono">Status: Awaiting Telemetry</p>
                     </div>
                 </div>
                 <div className="p-2 border border-white/10 rounded-full">
