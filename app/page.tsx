@@ -10,6 +10,7 @@ import { Buffer } from 'buffer'; // Ensure you have this or use btoa()
 
 export default function Home() {
   const [phValue, setPhValue] = useState(7.0);
+  const [tempValue, setTempValue] = useState(22.4);
   const [interceptMode, setInterceptMode] = useState(false);
   const [isTransmitting, setIsTransmitting] = useState(false);
   const [isInjecting, setIsInjecting] = useState(false);
@@ -25,7 +26,7 @@ export default function Home() {
   const generatePacket = async () => {
     const payload = {
       header: { device_id: "SN-8392-AX", timestamp: Math.floor(Date.now() / 1000) },
-      payload: { type: "telemetry", data: { ph_value: phValue, temp_c: 22.4 } } // Use current phValue
+      payload: { type: "telemetry", data: { ph_value: phValue, temp_c: tempValue } } // Use current values
     };
     const token = await signPayload(payload);
     return { payload, token };
@@ -176,7 +177,14 @@ export default function Home() {
 
         {/* Zone A: Edge Node */}
         <div className="z-10">
-          <EdgeNode phValue={phValue} setPhValue={setPhValue} onTransmit={handleTransmit} isTransmitting={isTransmitting} />
+          <EdgeNode
+            phValue={phValue}
+            setPhValue={setPhValue}
+            tempValue={tempValue}
+            setTempValue={setTempValue}
+            onTransmit={handleTransmit}
+            isTransmitting={isTransmitting}
+          />
         </div>
 
         {/* Zone B: Interceptor */}

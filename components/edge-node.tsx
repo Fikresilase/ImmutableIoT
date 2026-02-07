@@ -7,11 +7,13 @@ import { motion } from 'framer-motion';
 interface EdgeNodeProps {
     phValue: number;
     setPhValue: (val: number) => void;
+    tempValue: number;
+    setTempValue: (val: number) => void;
     onTransmit: () => void;
     isTransmitting: boolean;
 }
 
-export const EdgeNode: React.FC<EdgeNodeProps> = ({ phValue, setPhValue, onTransmit, isTransmitting }) => {
+export const EdgeNode: React.FC<EdgeNodeProps> = ({ phValue, setPhValue, tempValue, setTempValue, onTransmit, isTransmitting }) => {
     return (
         <div className="glass-card flex flex-col h-full overflow-hidden">
             {/* Header */}
@@ -62,36 +64,54 @@ export const EdgeNode: React.FC<EdgeNodeProps> = ({ phValue, setPhValue, onTrans
                     <div className="text-center z-10">
                         <motion.div
                             key={phValue}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="text-4xl font-black font-mono tracking-tighter"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="text-4xl font-black font-mono tracking-tighter text-blue-400"
                         >
                             {phValue.toFixed(1)}
                         </motion.div>
                         <div className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-1">
                             pH Level
                         </div>
+                        <div className="mt-2 text-xl font-bold text-zinc-400 font-mono">
+                            {tempValue.toFixed(1)}°C
+                        </div>
                     </div>
                 </div>
 
-                {/* Legend */}
-                <div className="mt-8 flex justify-between w-full text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
-                    <span>Acidic</span>
-                    <span>Neutral</span>
-                    <span>Alkaline</span>
-                </div>
+                {/* Sliders Area */}
+                <div className="w-full mt-8 space-y-6">
+                    <div>
+                        <div className="flex justify-between text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-2">
+                            <span>pH Sensor</span>
+                            <span>{phValue.toFixed(1)}</span>
+                        </div>
+                        <input
+                            type="range"
+                            min="0"
+                            max="14"
+                            step="0.1"
+                            value={phValue}
+                            onChange={(e) => setPhValue(parseFloat(e.target.value))}
+                            className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                        />
+                    </div>
 
-                {/* Slider */}
-                <div className="mt-4 w-full">
-                    <input
-                        type="range"
-                        min="0"
-                        max="14"
-                        step="0.1"
-                        value={phValue}
-                        onChange={(e) => setPhValue(parseFloat(e.target.value))}
-                        className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                    />
+                    <div>
+                        <div className="flex justify-between text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-2">
+                            <span>Temp Sensor (°C)</span>
+                            <span>{tempValue.toFixed(1)}</span>
+                        </div>
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            step="0.1"
+                            value={tempValue}
+                            onChange={(e) => setTempValue(parseFloat(e.target.value))}
+                            className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                        />
+                    </div>
                 </div>
             </div>
 
