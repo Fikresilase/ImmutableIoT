@@ -118,17 +118,13 @@ export default function Home() {
           <div className="p-2 bg-blue-600 rounded-lg"><Droplets className="w-5 h-5 text-white" /></div>
           <div>
             <h1 className="text-sm font-black tracking-widest uppercase">HydroGuard</h1>
-            <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Secure Water Integrity System</p>
+            <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">made for system security project</p>
           </div>
         </div>
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full">
-            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-[10px] text-green-500 font-bold uppercase tracking-wider">System Online</span>
-          </div>
-          <div className="flex items-center gap-3 border-l border-white/10 pl-6 h-8">
-            <button className="text-zinc-400 hover:text-white"><Settings className="w-4 h-4" /></button>
-            <button className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center border border-white/10 text-zinc-400"><User className="w-4 h-4" /></button>
+          <div className="flex flex-col items-end">
+            <span className="text-xs text-zinc-500 font-black uppercase tracking-[0.2em]">Student</span>
+            <span className="text-lg font-black tracking-tight text-white uppercase shadow-sm">Eyerusalem yonas lemma</span>
           </div>
         </div>
       </header>
