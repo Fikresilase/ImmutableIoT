@@ -65,18 +65,6 @@ export const Interceptor: React.FC<InterceptorProps> = ({
                 <div className="w-full px-12 relative h-full flex items-center">
                     {/* Visual line representation */}
                     <div className="w-full h-[1px] bg-zinc-800" />
-                    <motion.div
-                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,1)] z-10 cursor-help"
-                        animate={interceptMode ? {
-                            scale: [1, 1.2, 1],
-                            backgroundColor: "#ef4444",
-                            boxShadow: "0 0 20px rgba(239, 68, 68, 0.8)"
-                        } : {
-                            scale: 1,
-                            backgroundColor: "#3b82f6",
-                            boxShadow: "0 0 15px rgba(59, 130, 246, 0.5)"
-                        }}
-                    />
 
                     <div className="absolute right-12 bottom-2 text-[8px] font-mono text-zinc-600 uppercase">
                         Protocol: MQTT/TLS 1.3
@@ -104,18 +92,46 @@ export const Interceptor: React.FC<InterceptorProps> = ({
             {/* Code Editor */}
             <div className="flex-1 p-6 font-mono text-xs overflow-auto bg-[#0d1117] relative">
                 <div className="absolute right-4 top-4 px-2 py-0.5 bg-zinc-800 text-zinc-500 rounded text-[9px] font-bold">JSON</div>
-                <textarea
-                    readOnly={!interceptMode}
-                    value={localJson}
-                    onChange={(e) => handleJsonChange(e.target.value)}
-                    className={`w-full h-full bg-transparent outline-none resize-none transition-opacity ${interceptMode ? 'opacity-100 text-green-400' : 'opacity-60 text-blue-300'}`}
-                    spellCheck={false}
-                />
 
-                {/* Overlay when not in intercept mode */}
-                {!interceptMode && (
-                    <div className="absolute inset-0 bg-blue-500/5 pointer-events-none flex items-center justify-center">
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full">
+                <AnimatePresence mode="wait">
+                    {interceptMode && payload?.header?.device_id ? (
+                        <motion.div
+                            key="captured"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="h-full flex flex-col"
+                        >
+                            <div className="text-[10px] font-bold text-red-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <ShieldAlert className="w-3 h-3" />
+                                Packet Captured
+                            </div>
+                            <textarea
+                                value={localJson}
+                                onChange={(e) => handleJsonChange(e.target.value)}
+                                className="w-full h-full bg-transparent outline-none resize-none text-green-400"
+                                spellCheck={false}
+                            />
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="waiting"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="h-full flex flex-col items-center justify-center text-center opacity-40"
+                        >
+                            <Cpu className="w-8 h-8 text-blue-500 mb-2 animate-pulse" />
+                            <div className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">
+                                Waiting for Packet...
+                            </div>
+                            <div className="text-[9px] text-zinc-600 mt-1">Listening on port 8883</div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Overlay when not in intercept mode but payload exists */}
+                {!interceptMode && payload?.header?.device_id && (
+                    <div className="absolute inset-x-0 bottom-4 pointer-events-none flex items-center justify-center">
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full backdrop-blur-sm">
                             <ShieldAlert className="w-3 h-3 text-blue-400" />
                             <span className="text-[9px] text-blue-400 font-bold uppercase tracking-wider">Passive Monitoring</span>
                         </div>

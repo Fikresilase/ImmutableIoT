@@ -136,13 +136,40 @@ export default function Home() {
       <main className="flex-1 p-8 grid grid-cols-1 lg:grid-cols-3 gap-8 relative max-w-[1600px] mx-auto w-full">
 
         {/* ANIMATION LAYER */}
-        <div className="absolute inset-0 pointer-events-none z-20 flex items-center">
+        <div className="absolute inset-0 pointer-events-none z-50 flex items-center">
           <AnimatePresence>
             {packetStatus === 'flying-edge' && (
-              <motion.div initial={{ x: '16.66%', opacity: 0 }} animate={{ x: '50%', opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1, ease: "linear" }} className="w-4 h-4 rounded-full bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,1)] absolute" />
+              <motion.div
+                key="packet-edge"
+                initial={{ left: '16.66%', top: '50%', opacity: 0 }}
+                animate={{ left: '50%', top: '168px', opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1, ease: "linear" }}
+                className="w-4 h-4 rounded-full bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,1)] absolute -ml-2"
+              />
+            )}
+            {packetStatus === 'intercepted' && (
+              <motion.div
+                key="packet-stopped"
+                initial={{ left: '50%', top: '168px', opacity: 1, scale: 1.5 }}
+                animate={{
+                  scale: [1.5, 1.8, 1.5],
+                  backgroundColor: "#ef4444",
+                  boxShadow: "0 0 25px rgba(239, 68, 68, 0.8)"
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-4 h-4 rounded-full absolute -ml-2"
+              />
             )}
             {packetStatus === 'flying-cloud' && (
-              <motion.div initial={{ x: '50%', opacity: 1 }} animate={{ x: '83.33%', opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1, ease: "linear" }} className="w-4 h-4 rounded-full bg-red-400 shadow-[0_0_15px_rgba(239,68,68,1)] absolute" />
+              <motion.div
+                key="packet-cloud"
+                initial={{ left: '50%', top: '168px', opacity: 1 }}
+                animate={{ left: '83.33%', top: '50%', opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1, ease: "linear" }}
+                className={`w-4 h-4 rounded-full absolute -ml-2 ${interceptMode ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,1)]' : 'bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,1)]'}`}
+              />
             )}
           </AnimatePresence>
         </div>
