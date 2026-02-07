@@ -10,8 +10,8 @@ Ensure you have [Bun](https://bun.sh) installed on your system.
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Fikresilase/ImmutableIoT.git
-   cd ImmutableIoT
+   git clone https://github.com/Fikresilase/immutableiot.git
+   cd immutableiot
    ```
 
 2. **Install dependencies**
